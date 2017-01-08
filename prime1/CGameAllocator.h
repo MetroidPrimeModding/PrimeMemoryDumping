@@ -7,7 +7,7 @@
 #ifndef DOLPHIN_EMU_CGAMEALLOCATOR_H
 #define DOLPHIN_EMU_CGAMEALLOCATOR_H
 
-class CMemoryBlock : public game_value<0x20> {
+class CMemoryBlock : public game_value<> {
 public:
     CMemoryBlock(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
@@ -21,7 +21,7 @@ public:
     game_u32 canary = game_u32(ptr(), 0x1C);
 };
 
-class CGameAllocator : public game_value<0x14> {
+class CGameAllocator : public game_value<> {
 public:
     CGameAllocator(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 

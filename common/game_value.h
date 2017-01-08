@@ -70,11 +70,12 @@ public:
 
 template<class T, uint32_t count>
 class game_array : public game_value<T::size * count> {
+    static_assert(T::size > 0, "Attempting to create array of an object with undefined size");
 public:
     game_array(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<T::size * count>(base_ptr, ptr_offset) {}
 
     inline T operator[](std::size_t idx) const {
-      game_ptr<T> targetPointer(this->ptr(), T::size * idx);
+      game_ptr<T> targetPointer(this->ptr(), T::size * (idx % count));
       return targetPointer.deref();
     }
 };
