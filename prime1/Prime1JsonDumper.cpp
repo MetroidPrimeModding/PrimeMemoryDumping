@@ -1,6 +1,7 @@
 #include <vector>
 #include "Prime1JsonDumper.h"
-#include "CGameAllocator.h"
+#include "prime1/CGameAllocator.h"
+#include "prime1/actors/CPlayer.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -10,22 +11,29 @@ namespace Prime1JsonDumper {
       json json_heap;
       CGameAllocator allocator(0x804BFD64);
 
-      json_heap["size"] = allocator.heapSize().read();
+      json_heap["size"] = allocator.heapSize.read();
       vector<json> json_blocks;
 
-      CMemoryBlock block = allocator.first().deref();
+      CMemoryBlock block = allocator.first.deref();
       size_t blockid = 0;
 
-      while (block.ptr() != 0 && block.size().read() != 0) {
+      while (block.ptr() != 0 && block.size.read() != 0) {
         json json_block;
-        json_block["size"] = block.size().read();
+        json_block["size"] = block.size.read();
         json_block["start"] = block.ptr();
         json_blocks.push_back(json_block);
 
-        block = block.next().deref();
+        block = block.next.deref();
         blockid++;
       }
       json_heap["blocks"] = json_blocks;
       return json_heap;
+    }
+
+    json dumpPlayer() {
+      json json_player;
+      CPlayer player(0x8046B97C);
+
+      return json_player;
     }
 };

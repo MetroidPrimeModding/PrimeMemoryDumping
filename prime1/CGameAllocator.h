@@ -7,27 +7,27 @@
 #ifndef DOLPHIN_EMU_CGAMEALLOCATOR_H
 #define DOLPHIN_EMU_CGAMEALLOCATOR_H
 
-class CMemoryBlock : public game_value {
+class CMemoryBlock : public game_value<0x20> {
 public:
-    GPTR_METHODS(CMemoryBlock)
+    CMemoryBlock(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
-    GPTR(game_u32, sentinel, 0x0)
-    GPTR(game_u32, size, 0x4)
-    GPTR(game_value, fileAndLinePtr, 0x8)
-    GPTR(game_value, typePtr, 0xC)
-    GPTR(game_ptr<CMemoryBlock>, prev, 0x10)
-    GPTR(game_ptr<CMemoryBlock>, next, 0x14)
-    GPTR(game_u32, dataStart, 0x18)
-    GPTR(game_u32, canary, 0x1C)
+    game_u32 sentinel = game_u32(ptr(), 0x0);
+    game_u32 size = game_u32(ptr(), 0x4);
+    game_u32 fileAndLinePtr = game_u32(ptr(), 0x8);
+    game_u32 typePtr = game_u32(ptr(), 0xC);
+    game_ptr<CMemoryBlock> prev = game_ptr<CMemoryBlock>(ptr(), 0x10);
+    game_ptr<CMemoryBlock> next = game_ptr<CMemoryBlock>(ptr(), 0x14);
+    game_u32 dataStart = game_u32(ptr(), 0x18);
+    game_u32 canary = game_u32(ptr(), 0x1C);
 };
 
-class CGameAllocator : public game_value {
+class CGameAllocator : public game_value<0x14> {
 public:
-    GPTR_METHODS(CGameAllocator)
+    CGameAllocator(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
-    GPTR(game_u32, heapSize, 0x8)
-    GPTR(game_ptr<CMemoryBlock>, first, 0xC)
-    GPTR(game_ptr<CMemoryBlock>, last, 0x10)
+    game_u32 heapSize = game_u32(ptr(), 0x8);
+    game_ptr<CMemoryBlock> first = game_ptr<CMemoryBlock>(ptr(), 0xC);
+    game_ptr<CMemoryBlock> last = game_ptr<CMemoryBlock>(ptr(), 0x10);
 };
 
 #endif //DOLPHIN_EMU_CGAMEALLOCATOR_H

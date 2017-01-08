@@ -9,48 +9,74 @@
 #include <cstdio>
 #include "GameMemory.h"
 
-#define GPTR_METHODS(type) type(uint32_t base_ptr) : game_value(base_ptr, 0) {} \
-  type(const game_value &base_ptr, uint32_t ptr_offset) : game_value(base_ptr, ptr_offset) {} \
-  type(uint32_t base_ptr, uint32_t ptr_offset) : game_value(base_ptr, ptr_offset) {}
-
-#define GPTR(type, name, offset) inline type name() const { return type((this->ptr()), (offset)); }
-
+template<uint32_t valueSizeInBytes = 0x0>
 class game_value {
 public:
-    game_value(uint32_t base_ptr, uint32_t ptr_offset) : base(base_ptr), offset(ptr_offset) {}
+    static constexpr uint32_t size = valueSizeInBytes;
 
-    game_value(const game_value &base_ptr, uint32_t ptr_offset) : base(base_ptr.ptr()), offset(ptr_offset) {}
+#ifdef BASE_OFFSET
+    game_value(uint32_t base_ptr, uint32_t ptr_offset = 0) : base(base_ptr), offset(ptr_offset) {}
 
     inline uint32_t ptr() const {
       return base + offset;
     }
 
-
 private:
     uint32_t base;
     uint32_t offset;
+#else
+    game_value(uint32_t base_ptr, uint32_t ptr_offset = 0) : addr(base_ptr + ptr_offset) {}
+
+    inline uint32_t ptr() const {
+      return addr;
+    }
+
+private:
+    uint32_t addr;
+#endif
 };
 
-class game_u32 : public game_value {
+class game_u32 : public game_value<4> {
 public:
-    GPTR_METHODS(game_u32)
+    game_u32(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
     inline uint32_t read() const {
       return GameMemory::read_u32(ptr());
     }
 };
 
-template<class T>
-class game_ptr : public game_value {
+class game_float : public game_value<4> {
 public:
-    GPTR_METHODS(game_ptr)
+    game_float(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
+
+    inline float read() const {
+      return GameMemory::read_float(ptr());
+    }
+};
+
+
+template<class T>
+class game_ptr : public game_value<4> {
+public:
+    game_ptr(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
     T deref() const {
       uint32_t toDeref = ptr();
       uint32_t targetPtr = GameMemory::read_u32(toDeref);
       return T(targetPtr);
     }
+
 };
 
+template<class T, uint32_t count>
+class game_array : public game_value<T::size * count> {
+public:
+    game_array(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<T::size * count>(base_ptr, ptr_offset) {}
+
+    inline T operator[](std::size_t idx) const {
+      game_ptr<T> targetPointer(this->ptr(), T::size * idx);
+      return targetPointer.deref();
+    }
+};
 
 #endif //DOLPHIN_EMU_GAME_PTR_H
