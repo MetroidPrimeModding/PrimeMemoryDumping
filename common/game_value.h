@@ -75,7 +75,8 @@ public:
     game_array(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<T::size * count>(base_ptr, ptr_offset) {}
 
     inline T operator[](std::size_t idx) const {
-      game_ptr<T> targetPointer(this->ptr(), T::size * (idx % count));
+      assert(idx < count); //In debug mode, error
+      game_ptr<T> targetPointer(this->ptr(), T::size * (idx % count)); //In production, take the modulus and hope for the best
       return targetPointer.deref();
     }
 };
