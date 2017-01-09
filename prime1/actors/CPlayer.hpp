@@ -1,9 +1,10 @@
 #ifndef DOLPHIN_EMU_CPLAYER_H
 #define DOLPHIN_EMU_CPLAYER_H
 
-#include "CPhysicsActor.hpp"
-#include "CPlayerGun.hpp"
-#include "CMorphBall.hpp"
+#include "prime1/actors/CPhysicsActor.hpp"
+#include "prime1/actors/CPlayerGun.hpp"
+#include "prime1/actors/CMorphBall.hpp"
+#include "prime1/CPlayerCameraBob.hpp"
 
 class CPlayer : public CPhysicsActor {
 public:
@@ -14,6 +15,7 @@ public:
 
     game_ptr<CPlayerGun> gun = game_ptr<CPlayerGun>(ptr(), 0x490);
     game_ptr<CMorphBall> morphBall = game_ptr<CMorphBall>(ptr(), 0x768);
+    game_ptr<CPlayerCameraBob> cameraBob = game_ptr<CPlayerCameraBob>(ptr(), 0x76C);
 };
 
 

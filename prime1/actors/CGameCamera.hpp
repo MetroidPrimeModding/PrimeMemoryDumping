@@ -14,7 +14,7 @@ public:
 
     game_u32 watchedObject = game_u32(ptr(), 0xE8);
     CMatrix4f perspectiveMatrix = CMatrix4f(ptr(), 0xEC);
-    CTransform transform = CTransform(ptr(), 0x12C);
+    CTransform camTransform = CTransform(ptr(), 0x12C);
     game_float currentFov = game_float(ptr(), 0x15C);
     game_float znear = game_float(ptr(), 0x160);
     game_float zfar = game_float(ptr(), 0x164);

@@ -69,6 +69,12 @@ namespace Prime1JsonDumper {
       CGameState gameState = global.gameState.deref();
       res["timer"] = gameState.playTime.read();
 
+      json camera_bob;
+      camera_bob["transform"] = player.cameraBob.deref().cameraBobTransform.matrix.json();
+      camera_bob["magnitude"] = player.cameraBob.deref().bobMagnitude.read();
+      camera_bob["time_scale"] = player.cameraBob.deref().bobTimeScale.read();
+      res["camera_bob"] = camera_bob;
+
       return res;
     }
 
@@ -106,6 +112,12 @@ namespace Prime1JsonDumper {
       CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
       CGameState gameState = global.gameState.deref();
       res["timer"] = gameState.playTime.read();
+
+      json camera_bob;
+      camera_bob["transform"] = player.cameraBob.deref().cameraBobTransform.rawMatrix.json();
+      camera_bob["magnitude"] = player.cameraBob.deref().rawBobMagnitude.read();
+      camera_bob["time_scale"] = player.cameraBob.deref().rawBobTimeScale.read();
+      res["camera_bob"] = camera_bob;
 
       return res;
     }
@@ -146,8 +158,6 @@ namespace Prime1JsonDumper {
 
       firstPerson_json["gun_follow"] = firstPerson.gunFollowXf.matrix.json();
       firstPerson_json["gun_follow_raw"] = firstPerson.gunFollowXf.rawMatrix.json();
-      firstPerson_json["unknown_vec"] = firstPerson.unknownVec.json();
-      firstPerson_json["unknown_vec_raw"] = firstPerson.unknownVec.rawJson();
       res["first_person"] = firstPerson_json;
 
       return res;
@@ -160,6 +170,9 @@ namespace Prime1JsonDumper {
       res["perspective_raw"] = cam.perspectiveMatrix.rawJson();
       res["transform"] = cam.transform.matrix.json();
       res["transform_raw"] = cam.transform.rawMatrix.json();
+      res["transform_addr"] = cam.transform.ptr();
+      res["transform_cam"] = cam.camTransform.matrix.json();
+      res["transform_cam_raw"] = cam.camTransform.rawMatrix.json();
       res["current_fov"] = cam.currentFov.read();
       res["znear"] = cam.znear.read();
       res["zfar"] = cam.zfar.read();

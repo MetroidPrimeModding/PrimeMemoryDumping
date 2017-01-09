@@ -9,7 +9,6 @@ public:
     CFirstPersonCamera(uint32_t base_ptr, uint32_t ptr_offset = 0) : CGameCamera(base_ptr, ptr_offset) {}
 
     CTransform gunFollowXf = CTransform(ptr(), 0x190);
-    CVector3f unknownVec = CVector3f(ptr(), 0x1C8);
 };
 
 
