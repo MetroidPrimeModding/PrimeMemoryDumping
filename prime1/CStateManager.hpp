@@ -5,6 +5,7 @@
 #include "prime1/actors/CPlayer.hpp"
 #include "prime1/CWorld.hpp"
 #include "prime1/CPlayerState.hpp"
+#include "prime1/CCameraManager.hpp"
 
 class CStateManager : public game_value<> {
 public:
@@ -13,6 +14,7 @@ public:
 
     game_ptr<CPlayer> player = game_ptr<CPlayer>(ptr(), 0x84C);
     game_ptr<CWorld> world = game_ptr<CWorld>(ptr(), 0x850);
+    game_ptr<CCameraManager> cameraManager = game_ptr<CCameraManager>(ptr(), 0x870);
     game_rc_ptr<CPlayerState> playerState = game_rc_ptr<CPlayerState>(ptr(), 0x8b8);
 };
 

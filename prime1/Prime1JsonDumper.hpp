@@ -6,6 +6,7 @@
 namespace Prime1JsonDumper {
     nlohmann::json parseHeap();
     nlohmann::json parsePlayer();
+    nlohmann::json parseCamera();
     nlohmann::json parsePlayerRaw();
     nlohmann::json parseWorld();
 };

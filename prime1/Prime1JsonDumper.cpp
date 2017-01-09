@@ -62,7 +62,7 @@ namespace Prime1JsonDumper {
       res["health"] = playerState.healthInfo.health.read();
       res["beam"] = playerState.currentBeam.read();
       res["visor"] = playerState.currentVisor.read();
-      res["suit"] =  playerState.currentSuit.read();
+      res["suit"] = playerState.currentSuit.read();
       res["inventory"] = playerState.powerups.array.json();
 
       CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
@@ -100,7 +100,7 @@ namespace Prime1JsonDumper {
       res["health"] = playerState.healthInfo.health.read();
       res["beam"] = playerState.currentBeam.read();
       res["visor"] = playerState.currentVisor.read();
-      res["suit"] =  playerState.currentSuit.read();
+      res["suit"] = playerState.currentSuit.read();
       res["inventory"] = playerState.powerups.array.json();
 
       CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
@@ -119,6 +119,52 @@ namespace Prime1JsonDumper {
       res["mlvl"] = world.mlvlID.read();
       res["strg"] = world.strgID.read();
       res["area"] = world.currentAreaID.read();
+
+      return res;
+    }
+
+    json parseCamera(CGameCamera &cam);
+
+    json parseCamera() {
+      json res;
+      CStateManager stateManager(CStateManager::LOCATION);
+
+      CCameraManager cameraManager = stateManager.cameraManager.deref();
+      if (cameraManager.ptr() == 0) {
+        return res;
+      }
+
+      CFirstPersonCamera firstPerson = cameraManager.firstPerson.deref();
+      CBallCamera ball = cameraManager.ball.deref();
+
+      if (firstPerson.ptr() == 0) {
+        return res;
+      }
+
+      res["ball"] = parseCamera(ball);
+      json firstPerson_json = parseCamera(firstPerson);
+
+      firstPerson_json["gun_follow"] = firstPerson.gunFollowXf.matrix.json();
+      firstPerson_json["gun_follow_raw"] = firstPerson.gunFollowXf.rawMatrix.json();
+      firstPerson_json["unknown_vec"] = firstPerson.unknownVec.json();
+      firstPerson_json["unknown_vec_raw"] = firstPerson.unknownVec.rawJson();
+      res["first_person"] = firstPerson_json;
+
+      return res;
+    }
+
+    json parseCamera(CGameCamera &cam) {
+      json res;
+      res["watched"] = cam.watchedObject.read();
+      res["perspective"] = cam.perspectiveMatrix.json();
+      res["perspective_raw"] = cam.perspectiveMatrix.rawJson();
+      res["transform"] = cam.transform.matrix.json();
+      res["transform_raw"] = cam.transform.rawMatrix.json();
+      res["current_fov"] = cam.currentFov.read();
+      res["znear"] = cam.znear.read();
+      res["zfar"] = cam.zfar.read();
+      res["aspect"] = cam.aspect.read();
+      res["fov"] = cam.fov.read();
 
       return res;
     }
