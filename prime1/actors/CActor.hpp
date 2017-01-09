@@ -1,8 +1,8 @@
 #ifndef DOLPHIN_EMU_CACTOR_H
 #define DOLPHIN_EMU_CACTOR_H
 
-#include "CEntity.h"
-#include "prime1/CTransform.h"
+#include "CEntity.hpp"
+#include "prime1/CTransform.hpp"
 
 class CActor : public CEntity {
 public:

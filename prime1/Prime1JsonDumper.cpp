@@ -1,7 +1,9 @@
 #include <vector>
-#include "Prime1JsonDumper.h"
-#include "prime1/CGameAllocator.h"
-#include "prime1/actors/CPlayer.h"
+#include "prime1/Prime1JsonDumper.hpp"
+#include "prime1/CGameAllocator.hpp"
+#include "prime1/actors/CPlayer.hpp"
+#include "prime1/CWorld.hpp"
+#include "prime1/CStateManager.hpp"
 
 using namespace std;
 using namespace nlohmann;
@@ -30,10 +32,50 @@ namespace Prime1JsonDumper {
       return json_heap;
     }
 
-    json dumpPlayer() {
-      json json_player;
-      CPlayer player(0x8046B97C);
+    json parsePlayer() {
+      json res;
+      CStateManager stateManager(CStateManager::LOCATION);
+      CPlayer player = stateManager.player.deref();
 
-      return json_player;
+      res["transform"] = player.transform.matrix.json();
+      res["constant_force"] = player.constantForce.json();
+      res["angular_momentum"] = player.angularMomentum.json();
+      res["velocity"] = player.velocity.json();
+      res["angular_velocity"] = player.angularVelocity.json();
+      res["momentum"] = player.momentum.json();
+      res["force"] = player.force.json();
+      res["impulse"] = player.impulse.json();
+      res["torque"] = player.torque.json();
+      res["angular_impulse"] = player.angularImpulse.json();
+      res["collision_primitive"] = player.collisionPrimitive.aabb.values.json();
+      res["primitive_offset"] = player.primitiveOffset.json();
+      res["translation"] = player.translation.json();
+      res["orientation"] = player.orientation.json();
+      res["camera_state"] = player.cameraState.read();
+      res["morph_state"] = player.morphState.read();
+//      json_player["gun"]
+      res["morphball"] = player.morphBall.deref().json();
+
+      CPlayerState state = stateManager.playerState.deref().deref();
+      res["health"] = state.healthInfo.health.read();
+      res["beam"] = state.currentBeam.read();
+      res["visor"] = state.currentVisor.read();
+      res["suit"] =  state.currentSuit.read();
+      res["inventory"] = state.powerups.array.json();
+
+      return res;
+    }
+
+    json parseWorld() {
+      json res;
+      CStateManager stateManager(CStateManager::LOCATION);
+      CWorld world = stateManager.world.deref();
+
+      res["phase"] = world.phase.read();
+      res["mlvl"] = world.mlvlID.read();
+      res["strg"] = world.strgID.read();
+      res["area"] = world.currentAreaID.read();
+
+      return res;
     }
 };

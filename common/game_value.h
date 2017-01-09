@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 #include "GameMemory.h"
+#include "json.hpp"
 
 template<uint32_t valueSizeInBytes = 0x0>
 class game_value {
@@ -43,6 +44,10 @@ public:
     inline uint32_t read() const {
       return GameMemory::read_u32(ptr());
     }
+
+    inline nlohmann::json json() {
+      return read();
+    }
 };
 
 class game_float : public game_value<4> {
@@ -51,6 +56,10 @@ public:
 
     inline float read() const {
       return GameMemory::read_float(ptr());
+    }
+
+    inline nlohmann::json json() {
+      return read();
     }
 };
 
@@ -68,6 +77,22 @@ public:
 
 };
 
+template<class T>
+class game_rc_ptr_data : public game_value<8> {
+public:
+    game_rc_ptr_data(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
+
+    game_ptr<T> raw_ptr = game_ptr<T>(ptr(), 0x0);
+    game_u32 refcount = game_u32(ptr(), 0x4);
+
+    inline T deref() {
+      return raw_ptr.deref();
+    }
+};
+
+template<class T>
+using game_rc_ptr = game_ptr<game_rc_ptr_data<T>>;
+
 template<class T, uint32_t count>
 class game_array : public game_value<T::size * count> {
     static_assert(T::size > 0, "Attempting to create array of an object with undefined size");
@@ -76,8 +101,16 @@ public:
 
     inline T operator[](std::size_t idx) const {
       assert(idx < count); //In debug mode, error
-      game_ptr<T> targetPointer(this->ptr(), T::size * (idx % count)); //In production, take the modulus and hope for the best
-      return targetPointer.deref();
+      return T(this->ptr(), T::size * (idx % count)); //In production, take the modulus and hope for the best
+    }
+
+    inline nlohmann::json json() {
+      std::vector<nlohmann::json> res;
+      for (size_t i = 0; i < count; i++) {
+        T ele = (*this)[i];
+        res.push_back(ele.json());
+      }
+      return res;
     }
 };
 
