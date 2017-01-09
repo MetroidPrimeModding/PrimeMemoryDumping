@@ -63,6 +63,18 @@ public:
     }
 };
 
+class game_double : public game_value<8> {
+public:
+    game_double(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
+
+    inline double read() const {
+      return GameMemory::read_double(ptr());
+    }
+
+    inline nlohmann::json json() {
+      return read();
+    }
+};
 
 template<class T>
 class game_ptr : public game_value<4> {

@@ -4,6 +4,8 @@
 #include "prime1/actors/CPlayer.hpp"
 #include "prime1/CWorld.hpp"
 #include "prime1/CStateManager.hpp"
+#include "prime1/CGameGlobalObjects.hpp"
+#include "prime1/CGameState.hpp"
 
 using namespace std;
 using namespace nlohmann;
@@ -56,12 +58,16 @@ namespace Prime1JsonDumper {
 //      json_player["gun"]
       res["morphball"] = player.morphBall.deref().json();
 
-      CPlayerState state = stateManager.playerState.deref().deref();
-      res["health"] = state.healthInfo.health.read();
-      res["beam"] = state.currentBeam.read();
-      res["visor"] = state.currentVisor.read();
-      res["suit"] =  state.currentSuit.read();
-      res["inventory"] = state.powerups.array.json();
+      CPlayerState playerState = stateManager.playerState.deref().deref();
+      res["health"] = playerState.healthInfo.health.read();
+      res["beam"] = playerState.currentBeam.read();
+      res["visor"] = playerState.currentVisor.read();
+      res["suit"] =  playerState.currentSuit.read();
+      res["inventory"] = playerState.powerups.array.json();
+
+      CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
+      CGameState gameState = global.gameState.deref();
+      res["timer"] = gameState.playTime.read();
 
       return res;
     }
