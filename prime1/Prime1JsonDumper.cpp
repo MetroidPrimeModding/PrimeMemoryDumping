@@ -181,4 +181,58 @@ namespace Prime1JsonDumper {
 
       return res;
     }
+
+    json parsePool() {
+      CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
+      CSimplePool pool = global.mainPool;
+
+      std::vector<nlohmann::json> ids;
+
+      auto inOrder = pool.resources.root.deref().inOrder();
+
+      transform(inOrder.begin(), inOrder.end(), back_inserter(ids), [](CSimplePool::ResourceType pair) { return pair.b.json(); });
+
+      return json(ids);
+    }
+
+    json parsePoolBasic() {
+      CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
+      CSimplePool pool = global.mainPool;
+
+      std::vector<uint32_t> ids;
+
+      auto inOrder = pool.resources.root.deref().inOrder();
+
+      transform(inOrder.begin(), inOrder.end(), back_inserter(ids), [](CSimplePool::ResourceType pair) { return pair.a.id.read(); });
+
+      return json(ids);
+    }
+
+    json parsePoolSummary() {
+      CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
+      CSimplePool pool = global.mainPool;
+      auto inOrder = pool.resources.root.deref().inOrder();
+
+      json res;
+      res["count"] = inOrder.size();
+
+      size_t loadingCount = 0;
+      size_t nullCount = 0;
+
+      for (auto iter = inOrder.begin(); iter != inOrder.end(); iter++) {
+        auto pair = *iter;
+        auto ref = pair.b.deref();
+        if (ref.isLoading()) {
+          loadingCount++;
+        }
+        if (ref.object.read() == 0) {
+          nullCount++;
+        }
+      }
+
+      res["loadingCount"] = loadingCount;
+      res["nullCount"] = nullCount;
+
+      return res;
+    }
 };

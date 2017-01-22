@@ -9,7 +9,11 @@ namespace Prime1JsonDumper {
     nlohmann::json parseCamera();
     nlohmann::json parsePlayerRaw();
     nlohmann::json parseWorld();
+    nlohmann::json parsePool();
+    nlohmann::json parsePoolBasic();
+    nlohmann::json parsePoolSummary();
 };
 
 
 #endif //DOLPHIN_EMU_PRIMEJSONDUMPER_H
+

@@ -37,6 +37,33 @@ private:
 #endif
 };
 
+class game_u8 : public game_value<1> {
+public:
+    game_u8(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<1>(base_ptr, ptr_offset) {}
+
+    inline uint8_t read() const {
+      return static_cast<uint8_t>((GameMemory::read_u32(ptr()) >> 24) & 0xFF);
+    }
+
+    inline nlohmann::json json() {
+      return read();
+    }
+};
+
+class game_u16 : public game_value<2> {
+public:
+    game_u16(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<2>(base_ptr, ptr_offset) {}
+
+    inline uint8_t read() const {
+      return static_cast<uint16_t>((GameMemory::read_u32(ptr()) >> 16) & 0xFFFF);
+    }
+
+    inline nlohmann::json json() {
+      return read();
+    }
+};
+
+
 class game_u32 : public game_value<4> {
 public:
     game_u32(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
@@ -87,6 +114,9 @@ public:
       return T(targetPtr);
     }
 
+    inline nlohmann::json json() {
+      return deref().json();
+    }
 };
 
 template<class T>
