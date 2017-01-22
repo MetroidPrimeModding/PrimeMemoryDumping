@@ -6,9 +6,12 @@
 #define DOLPHIN_EMU_GAME_PTR_H
 
 #include <cstdint>
-#include <cstdio>
+#include <cassert>
 #include "GameMemory.h"
+
+#ifdef PRIME_DUMP_JSON
 #include "json.hpp"
+#endif
 
 template<uint32_t valueSizeInBytes = 0x0>
 class game_value {
@@ -45,9 +48,11 @@ public:
       return static_cast<uint8_t>((GameMemory::read_u32(ptr()) >> 24) & 0xFF);
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
     }
+#endif
 };
 
 class game_u16 : public game_value<2> {
@@ -58,9 +63,11 @@ public:
       return static_cast<uint16_t>((GameMemory::read_u32(ptr()) >> 16) & 0xFFFF);
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
     }
+#endif
 };
 
 
@@ -72,9 +79,11 @@ public:
       return GameMemory::read_u32(ptr());
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
     }
+#endif
 };
 
 class game_float : public game_value<4> {
@@ -85,9 +94,11 @@ public:
       return GameMemory::read_float(ptr());
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
     }
+#endif
 };
 
 class game_double : public game_value<8> {
@@ -98,9 +109,11 @@ public:
       return GameMemory::read_double(ptr());
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
     }
+#endif
 };
 
 template<class T>
@@ -114,9 +127,11 @@ public:
       return T(targetPtr);
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return deref().json();
     }
+#endif
 };
 
 template<class T>
@@ -146,6 +161,7 @@ public:
       return T(this->ptr(), T::size * (idx % count)); //In production, take the modulus and hope for the best
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       std::vector<nlohmann::json> res;
       for (size_t i = 0; i < count; i++) {
@@ -154,6 +170,7 @@ public:
       }
       return res;
     }
+#endif
 };
 
 #endif //DOLPHIN_EMU_GAME_PTR_H

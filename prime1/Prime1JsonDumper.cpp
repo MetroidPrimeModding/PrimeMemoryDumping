@@ -7,7 +7,6 @@
 #include "prime1/CGameGlobalObjects.hpp"
 #include "prime1/CGameState.hpp"
 
-using namespace std;
 using namespace nlohmann;
 
 namespace Prime1JsonDumper {
@@ -16,7 +15,7 @@ namespace Prime1JsonDumper {
       CGameAllocator allocator(0x804BFD64);
 
       json_heap["size"] = allocator.heapSize.read();
-      vector<json> json_blocks;
+      std::vector<json> json_blocks;
 
       CMemoryBlock block = allocator.first.deref();
       size_t blockid = 0;
@@ -211,27 +210,9 @@ namespace Prime1JsonDumper {
     json parsePoolSummary() {
       CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
       CSimplePool pool = global.mainPool;
-      auto inOrder = pool.resources.root.deref().inOrder();
 
       json res;
-      res["count"] = inOrder.size();
-
-      size_t loadingCount = 0;
-      size_t nullCount = 0;
-
-      for (auto iter = inOrder.begin(); iter != inOrder.end(); iter++) {
-        auto pair = *iter;
-        auto ref = pair.b.deref();
-        if (ref.isLoading()) {
-          loadingCount++;
-        }
-        if (ref.object.read() == 0) {
-          nullCount++;
-        }
-      }
-
-      res["loadingCount"] = loadingCount;
-      res["nullCount"] = nullCount;
+      res["count"] = pool.resources.size.read();
 
       return res;
     }

@@ -11,6 +11,7 @@ public:
     game_array<game_float, 16> values = game_array<game_float, 16>(ptr(), 0x0);
     game_array<game_u32, 16> rawValues = game_array<game_u32, 16>(ptr(), 0x0);
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return values.json();
     }
@@ -18,6 +19,7 @@ public:
     inline nlohmann::json rawJson() {
       return rawValues.json();
     }
+#endif
 };
 
 #endif //DOLPHIN_EMU_CMATRIX4F_HPP

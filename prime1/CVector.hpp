@@ -20,6 +20,7 @@ public:
       return game_ptr<T>(first.ptr(), (idx % count) * T::size); //In production, take the modulus and hope for the best
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       uint32_t count = size.read();
       std::vector<nlohmann::json> res;
@@ -29,6 +30,7 @@ public:
       }
       return res;
     }
+#endif
 };
 
 #endif //PRIME_WATCH_DUMP_CVECTOR_HPP

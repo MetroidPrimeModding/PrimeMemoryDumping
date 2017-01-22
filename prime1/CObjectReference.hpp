@@ -22,6 +22,7 @@ public:
       return (loading.read() & 0x8000) != 0;
     }
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       nlohmann::json res;
       res["refCount"] = refCount.read();
@@ -32,6 +33,7 @@ public:
       res["objectPtr"] = object.read();
       return res;
     }
+#endif
 };
 
 #endif //PRIME_WATCH_DUMP_COBJECTREFERENCE_HPP

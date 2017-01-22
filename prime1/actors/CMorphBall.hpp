@@ -10,6 +10,7 @@ public:
 
     CSpherePrimitive collisionPrimitive = CSpherePrimitive(ptr(), 0x38);
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       nlohmann::json res;
       nlohmann::json primitive;
@@ -18,6 +19,7 @@ public:
       res["collision_primitive"] = primitive;
       return res;
     }
+#endif
 };
 
 #endif //PRIME_WATCH_DUMP_CPLAYERGUN_H

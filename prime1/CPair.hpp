@@ -13,12 +13,14 @@ public:
     A a = A(this->ptr(), 0x0);
     B b = B(this->ptr(), A::size);
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       nlohmann::json res;
       res["left"] = a.json();
       res["right"] = b.json();
       return res;
     }
+#endif
 };
 
 #endif //PRIME_WATCH_DUMP_CPAIR_HPP

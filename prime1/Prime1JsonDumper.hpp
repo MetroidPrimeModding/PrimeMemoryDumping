@@ -1,6 +1,7 @@
 #ifndef DOLPHIN_EMU_PRIMEJSONDUMPER_H
 #define DOLPHIN_EMU_PRIMEJSONDUMPER_H
 
+#ifdef PRIME_DUMP_JSON
 #include "json.hpp"
 
 namespace Prime1JsonDumper {
@@ -14,6 +15,7 @@ namespace Prime1JsonDumper {
     nlohmann::json parsePoolSummary();
 };
 
+#endif
 
 #endif //DOLPHIN_EMU_PRIMEJSONDUMPER_H
 

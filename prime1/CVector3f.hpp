@@ -14,6 +14,7 @@ public:
     game_float y = game_float(ptr(), 0x4);
     game_float z = game_float(ptr(), 0x8);
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return {x.read(), y.read(), z.read()};
     }
@@ -21,6 +22,7 @@ public:
     inline nlohmann::json rawJson() {
       return rawValues.json();
     }
+#endif
 };
 
 

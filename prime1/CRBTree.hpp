@@ -37,6 +37,7 @@ public:
       return contents;
     }
 
+#ifdef PRIME_DUMP_JSON
     inline std::vector<nlohmann::json> inOrderJson() {
       std::vector<nlohmann::json> contents;
 
@@ -60,6 +61,7 @@ public:
     inline nlohmann::json json() {
       return nlohmann::json(inOrderJson());
     }
+#endif
 };
 
 template<class T>
@@ -73,6 +75,7 @@ public:
     game_ptr<CRBTreeNode<T>> last = game_ptr<CRBTreeNode<T>>(ptr(), 0x8);
     game_ptr<CRBTreeNode<T>> root = game_ptr<CRBTreeNode<T>>(ptr(), 0xC);
 
+#ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       if (root.deref().ptr() == 0) {
         std::vector<nlohmann::json> empty;
@@ -81,6 +84,7 @@ public:
         return root.deref().json();
       }
     }
+#endif
 };
 
 #endif //PRIME_WATCH_DUMP_CRBTREE_HPP
