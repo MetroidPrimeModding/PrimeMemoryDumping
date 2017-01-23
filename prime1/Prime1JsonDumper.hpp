@@ -13,6 +13,7 @@ namespace Prime1JsonDumper {
     nlohmann::json parsePool();
     nlohmann::json parsePoolBasic();
     nlohmann::json parsePoolSummary();
+    nlohmann::json parseHeapStats();
 };
 
 #endif

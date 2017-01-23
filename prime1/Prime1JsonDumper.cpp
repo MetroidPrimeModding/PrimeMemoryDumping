@@ -12,7 +12,7 @@ using namespace nlohmann;
 namespace Prime1JsonDumper {
     json parseHeap() {
       json json_heap;
-      CGameAllocator allocator(0x804BFD64);
+      CGameAllocator allocator(CGameAllocator::LOCATION);
 
       json_heap["size"] = allocator.heapSize.read();
       std::vector<json> json_blocks;
@@ -213,6 +213,36 @@ namespace Prime1JsonDumper {
 
       json res;
       res["count"] = pool.resources.size.read();
+
+      return res;
+    }
+
+    json parseHeapStats() {
+      CGameAllocator allocator(CGameAllocator::LOCATION);
+
+      json res;
+
+      res["heap_size"] = allocator.heapSize.read();
+
+      uint32_t unusedCount = 0;
+      uint32_t unusedSize = 0;
+      uint32_t usedCount = 0;
+      uint32_t usedSize = 0;
+
+      for (auto block = allocator.first.deref(); block.ptr() != 0; block = block.next.deref()) {
+        if (block.dataStart.read() == 0) {
+          unusedCount++;
+          unusedSize += block.size.read();
+        } else {
+          usedCount++;
+          usedSize += block.size.read();
+        }
+      }
+
+      res["unused_count"] = unusedCount;
+      res["unused_size"] = unusedSize;
+      res["used_count"] = usedCount;
+      res["used_size"] = usedSize;
 
       return res;
     }
