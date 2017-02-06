@@ -230,6 +230,10 @@ namespace Prime1JsonDumper {
       uint32_t usedSize = 0;
 
       for (auto block = allocator.first.deref(); block.ptr() != 0; block = block.next.deref()) {
+        if (unusedCount + usedCount > 10000) {
+          //Curses, memory was modified out from under us
+          break;
+        }
         if (block.dataStart.read() == 0) {
           unusedCount++;
           unusedSize += block.size.read();
