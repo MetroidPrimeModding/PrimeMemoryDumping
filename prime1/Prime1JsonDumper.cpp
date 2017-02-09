@@ -67,6 +67,7 @@ namespace Prime1JsonDumper {
       CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
       CGameState gameState = global.gameState.deref();
       res["timer"] = gameState.playTime.read();
+      res["framecount"] = global.frameCount.read();
 
       json camera_bob;
       camera_bob["transform"] = player.cameraBob.deref().cameraBobTransform.matrix.json();
