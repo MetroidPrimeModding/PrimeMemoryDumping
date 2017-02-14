@@ -7,6 +7,7 @@
 #include "prime1/CPlayerState.hpp"
 #include "prime1/CCameraManager.hpp"
 #include "prime1/CObjectList.hpp"
+#include "prime1/CRandom16.hpp"
 
 class CStateManager : public game_value<> {
 public:
@@ -19,6 +20,10 @@ public:
     game_ptr<CWorld> world = game_ptr<CWorld>(ptr(), 0x850);
     game_ptr<CCameraManager> cameraManager = game_ptr<CCameraManager>(ptr(), 0x870);
     game_rc_ptr<CPlayerState> playerState = game_rc_ptr<CPlayerState>(ptr(), 0x8b8);
+
+    game_u32 nextAreaID = game_u32(ptr(), 0x8CC);
+    game_u32 prevAreaID = game_u32(ptr(), 0x8D0);
+    CRandom16 random = CRandom16(ptr(), 0x8FC);
 };
 
 #endif //PRIME_WATCH_DUMP_CSTATEMANAGER_HPP
