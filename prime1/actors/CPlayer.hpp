@@ -10,6 +10,8 @@ class CPlayer : public CPhysicsActor {
 public:
     CPlayer(uint32_t base_ptr, uint32_t ptr_offset = 0) : CPhysicsActor(base_ptr, ptr_offset) {}
 
+    game_u8 jumpState = game_u8(ptr(), 0x258);
+    game_float sjTimer = game_float(ptr(), 0x28C);
     game_u32 cameraState = game_u32(ptr(), 0x2f4);
     game_u32 morphState = game_u32(ptr(), 0x2f8);
 

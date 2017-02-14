@@ -56,6 +56,8 @@ namespace Prime1JsonDumper {
       res["morph_state"] = player.morphState.read();
 //      json_player["gun"]
       res["morphball"] = player.morphBall.deref().json();
+      res["jump_state"] = player.jumpState.read();
+      res["spacejump_timer"] = player.sjTimer.read();
 
       CPlayerState playerState = stateManager.playerState.deref().deref();
       res["health"] = playerState.healthInfo.health.read();
@@ -79,7 +81,7 @@ namespace Prime1JsonDumper {
     }
 
     json parsePlayerRaw() {
-      json res;
+      json res = parsePlayer();
       CStateManager stateManager(CStateManager::LOCATION);
       CPlayer player = stateManager.player.deref();
 
@@ -97,21 +99,6 @@ namespace Prime1JsonDumper {
       res["primitive_offset"] = player.primitiveOffset.rawJson();
       res["translation"] = player.translation.rawJson();
       res["orientation"] = player.orientation.rawJson();
-      res["camera_state"] = player.cameraState.read();
-      res["morph_state"] = player.morphState.read();
-//      json_player["gun"]
-      res["morphball"] = player.morphBall.deref().json();
-
-      CPlayerState playerState = stateManager.playerState.deref().deref();
-      res["health"] = playerState.healthInfo.health.read();
-      res["beam"] = playerState.currentBeam.read();
-      res["visor"] = playerState.currentVisor.read();
-      res["suit"] = playerState.currentSuit.read();
-      res["inventory"] = playerState.powerups.array.json();
-
-      CGameGlobalObjects global(CGameGlobalObjects::LOCATION);
-      CGameState gameState = global.gameState.deref();
-      res["timer"] = gameState.playTime.read();
 
       json camera_bob;
       camera_bob["transform"] = player.cameraBob.deref().cameraBobTransform.rawMatrix.json();

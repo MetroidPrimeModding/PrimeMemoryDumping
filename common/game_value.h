@@ -48,6 +48,10 @@ public:
       return static_cast<uint8_t>((GameMemory::read_u32(ptr()) >> 24) & 0xFF);
     }
 
+    inline int8_t readSigned() const {
+      return static_cast<int8_t>((GameMemory::read_u32(ptr()) >> 24) & 0xFF);
+    }
+
 #ifdef PRIME_DUMP_JSON
     inline nlohmann::json json() {
       return read();
@@ -59,8 +63,12 @@ class game_u16 : public game_value<2> {
 public:
     game_u16(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value<2>(base_ptr, ptr_offset) {}
 
-    inline uint8_t read() const {
+    inline uint16_t read() const {
       return static_cast<uint16_t>((GameMemory::read_u32(ptr()) >> 16) & 0xFFFF);
+    }
+
+    inline int16_t readSigned() const {
+      return static_cast<int16_t>((GameMemory::read_u32(ptr()) >> 16) & 0xFFFF);
     }
 
 #ifdef PRIME_DUMP_JSON
