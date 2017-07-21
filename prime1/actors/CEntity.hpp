@@ -1,6 +1,7 @@
 #ifndef DOLPHIN_EMU_CENTITY_H
 #define DOLPHIN_EMU_CENTITY_H
 
+#include <prime1/rstl/rstl_string.hpp>
 #include "game_value.h"
 
 class CEntity : public game_value<> {
@@ -15,6 +16,7 @@ public:
     game_u32 areaID = game_u32(ptr(), 0x4);
     game_u16 uniqueID = game_u16(ptr(), 0x8);
     game_u32 editorID = game_u32(ptr(), 0xC);
+    rstl::string<char> name = rstl::string<char>(ptr(), 0x10);
     game_u8 status = game_u8(ptr(), 0x30);
 };
 

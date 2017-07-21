@@ -129,6 +129,10 @@ class game_ptr : public game_value<4> {
 public:
     game_ptr(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
 
+    inline uint32_t read() const {
+      return GameMemory::read_u32(ptr());
+    }
+
     T deref() const {
       uint32_t toDeref = ptr();
       uint32_t targetPtr = GameMemory::read_u32(toDeref);
