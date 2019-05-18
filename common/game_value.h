@@ -94,6 +94,41 @@ public:
 #endif
 };
 
+template <int bit>
+class game_u32_bit : public game_value<4> {
+  static_assert(bit <= 31, "Bit must be at most 31");
+  static_assert(bit >= 0, "Bit must be at least 0");
+public:
+
+  game_u32_bit(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
+
+  inline bool read() const {
+    return (GameMemory::read_u32(ptr()) >> bit) & 0x1;
+  }
+
+#ifdef PRIME_DUMP_JSON
+  inline nlohmann::json json() {
+    return read();
+  }
+#endif
+};
+
+template <class T>
+class game_u32_enum : public game_value<4> {
+public:
+  game_u32_enum(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}
+
+  inline T read() const {
+    return (T) GameMemory::read_u32(ptr());
+  }
+
+#ifdef PRIME_DUMP_JSON
+  inline nlohmann::json json() {
+    return read();
+  }
+#endif
+};
+
 class game_float : public game_value<4> {
 public:
     game_float(uint32_t base_ptr, uint32_t ptr_offset = 0) : game_value(base_ptr, ptr_offset) {}

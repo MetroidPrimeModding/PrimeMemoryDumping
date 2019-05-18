@@ -31,7 +31,6 @@ set(MEM_SRCS
         prime1/CPlayerState.hpp
         prime1/CRandom16.hpp
         prime1/CSpherePrimitive.hpp
-        prime1/CVector.hpp
         prime1/Prime1JsonDumper.hpp
         prime1/actors/CActor.hpp
         prime1/actors/CEntity.hpp
@@ -40,11 +39,11 @@ set(MEM_SRCS
         prime1/actors/CPhysicsActor.hpp
         prime1/actors/CPlayer.hpp
         prime1/actors/CPlayerGun.hpp
-        prime1/rstl/rstl_string.hpp
+        prime1/rstl/rstl.hpp
 
         prime1/Prime1JsonDumper.cpp
         prime1/Prime1ConsoleDumper.cpp
         common/MemoryBuffer.cpp
-        )
+        prime1/CGameArea.hpp)
 
 add_library(primememorydumping ${MEM_SRCS})

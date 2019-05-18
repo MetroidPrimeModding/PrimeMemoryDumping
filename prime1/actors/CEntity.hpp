@@ -1,7 +1,7 @@
 #ifndef DOLPHIN_EMU_CENTITY_H
 #define DOLPHIN_EMU_CENTITY_H
 
-#include <prime1/rstl/rstl_string.hpp>
+#include <prime1/rstl/rstl.hpp>
 #include "game_value.h"
 
 class CEntity : public game_value<> {
